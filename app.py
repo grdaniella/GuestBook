@@ -1,9 +1,9 @@
-from flask import Flask, request, flash, jsonify
+from flask import Flask, request, flash, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
-import config as config
+import config as configs
 
 app = Flask(__name__)
-app.config.update(config)
+app.config.from_object(configs)
 
 # http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#a-minimal-application
 db = SQLAlchemy(app)
@@ -22,12 +22,13 @@ def index():
     })
 
 
-@app.route('/create')
+@app.route('/create', methods=['POST'])
 def add_post():
     from models import GuestBook
     from forms import GuestBookForm
     if request.method == 'POST':
         form = GuestBookForm(request.form)
+        print(form.validate())
 
         if form.validate():
             post = GuestBook(**form.data)
@@ -39,8 +40,7 @@ def add_post():
             flash('Form is not valid! Post was not created.')
             flash(str(form.errors))
     posts = GuestBook.query.all()
-    for post in posts:
-        print(post)
+    return render_template('home.txt', posts=posts)
 
 
 if __name__ == '__main__':

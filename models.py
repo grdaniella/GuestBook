@@ -9,11 +9,11 @@ class GuestBook(db.Model):
     date = db.Column(db.Date, nullable=False, default=date.today)
     deleted = db.Column(db.Boolean)
 
-    # def to_json(self):
-    #     return {
-    #         'id': self.id,
-    #         'author': self.author,
-    #         'text': self.text,
-    #         'date': self.date,
-    #         'deleted': self.deleted
-    #     }
+    def to_json(self):
+        return {
+            'id': self.id,
+            'author': self.author,
+            'text': self.text,
+            'date': self.date,
+            'deleted': self.deleted
+        }
